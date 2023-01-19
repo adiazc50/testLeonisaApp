@@ -1,22 +1,17 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
 from typing import Optional
-from route.route import user
+from route.route import biblioteca
 
 app = FastAPI()
 
-app.include_router(user)
+
+
+app.include_router(biblioteca)
 
 #Creamos el modelo del libro
 """""
-class Libro(BaseModel):
-    isbnId: str
-    titulo: str
-    autor: str
-    editorial: str
-    coleccion: str
-    cantidad: int
-    diponible: bool
+
 
 @app.get("/buscarLibro")
 def buscarLibro():
