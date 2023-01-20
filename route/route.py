@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Response
-from starlette.status import HTTP_201_CREATED
+from starlette.status import HTTP_201_CREATED, HTTP_204_NO_CONTENT
 from schema.biblioteca_Schema import bibliotecaSchema
 from config.db import engine
 from model.biblioteca import biblioteca
@@ -31,7 +31,7 @@ def crearLibros(data_libro: bibliotecaSchema):
         conn.execute(biblioteca.insert().values(nuevoLibro))
         return Response(status_code=HTTP_201_CREATED)
 
-@bibliotec.put("/api/actualizarEstado/{isbnId}")
+@bibliotec.put("/api/actualizarEstado/{isbnId}",response_model=bibliotecaSchema)
 def actualizarLibro(data_update:bibliotecaSchema,isbnId: str):
     with engine.connect() as conn:
         conn.execute(biblioteca.update().values(titulo=data_update.titulo,autor=data_update.autor,
@@ -40,6 +40,12 @@ def actualizarLibro(data_update:bibliotecaSchema,isbnId: str):
         resultado = conn.execute(biblioteca.select().where(biblioteca.c.isbnId == isbnId)).first()
         return resultado
 
+
+@bibliotec.delete("/api/libro/{isbnId}",status_code=HTTP_204_NO_CONTENT)
+def borrarLibro(isbnId:str):
+    with engine.connect() as conn:
+        conn.execute(biblioteca.delete().where(biblioteca.c.isbnId == isbnId))
+        return Response(status_code=HTTP_204_NO_CONTENT)
 
 
 
