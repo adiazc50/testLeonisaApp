@@ -1,8 +1,8 @@
 from fastapi import APIRouter
 from schema.biblioteca_Schema import bibliotecaSchema
-from config.db import engine
-#from model.biblioteca import bibliotecas
-#from typing import List
+from config.db import conn
+from model.biblioteca import biblioteca
+from typing import List
 
 biblioteca= APIRouter()
 
@@ -13,7 +13,14 @@ def root():
 
 @biblioteca.post("/api/crearLibros")
 def crearLibros(data_libro: bibliotecaSchema):
+    nuevoLibro= data_libro.dict()
+    print(nuevoLibro)
     print(data_libro)
+    #conn.execute(bibliotecas.insert().values())
+
+@biblioteca.put("/api/actualizarEstado")
+def actualizarLibro():
+    pass
 
 
 
@@ -44,7 +51,5 @@ def crearLibro(data_Libro:bibliotecaSchema):
         #print(nuevo_libro)
     
 
-@biblioteca.put("/api/actualizarEstado")
-def actualizarLibro():
-    pass
+
 """
