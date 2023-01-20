@@ -4,21 +4,20 @@ from config.db import conn
 from model.biblioteca import biblioteca
 from typing import List
 
-biblioteca= APIRouter()
+bibliotec= APIRouter()
 
-@biblioteca.get("/")
+@bibliotec.get("/")
 def root():
     return{"message":"Bienvenidos al gestor de la API, para visualizar rutas dirigete a /docs"}
 
 
-@biblioteca.post("/api/crearLibros")
+@bibliotec.post("/api/crearLibros")
 def crearLibros(data_libro: bibliotecaSchema):
     nuevoLibro= data_libro.dict()
-    print(nuevoLibro)
-    print(data_libro)
-    #conn.execute(bibliotecas.insert().values())
+    conn.execute(biblioteca.insert().values(nuevoLibro))
+    return "Success"
 
-@biblioteca.put("/api/actualizarEstado")
+@bibliotec.put("/api/actualizarEstado")
 def actualizarLibro():
     pass
 

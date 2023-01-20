@@ -8,5 +8,5 @@ class bibliotecaSchema(BaseModel):
     editorial: str
     coleccion: str
     cantidad: int
-    diponible: bool
+    diponible: int
 

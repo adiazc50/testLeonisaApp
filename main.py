@@ -1,8 +1,8 @@
 from fastapi import FastAPI
-from route.route import biblioteca
+from route.route import bibliotec
 
 app = FastAPI()
 
 
 
-app.include_router(biblioteca)
+app.include_router(bibliotec)
