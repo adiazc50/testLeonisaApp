@@ -4,33 +4,37 @@ from schema.biblioteca_Schema import bibliotecaSchema
 from config.db import engine
 from model.biblioteca import biblioteca
 from typing import List
+from fastapi.middleware.cors import CORSMiddleware
+from starlette.middleware.cors import CORSMiddleware
 
 bibliotec= APIRouter()
 
+
+#Raiz donde se indica la direccion con todas las rutas de la API
 @bibliotec.get("/")
 def root():
     return{"message":"Bienvenidos al gestor de la API, para visualizar rutas dirigete a /docs"}
-
+#Traemos todos los libros de la base de datos
 @bibliotec.get("/api/libros",response_model=List[bibliotecaSchema])
 def mostrarLibros():
     with engine.connect() as conn:
         resultado = conn.execute(biblioteca.select()).fetchall()
         return resultado
-
+#Consulta a un libro en especifico
 @bibliotec.get("/api/consultarLibro/{isbnId}", response_model=bibliotecaSchema)
 def obtenerLibro(isbnId: str):
     with engine.connect() as conn:
         resultado= conn.execute(biblioteca.select().where(biblioteca.c.isbnId== isbnId)).first()
         return resultado
 
-
+#Crear un nuevo libro
 @bibliotec.post("/api/crearLibros", status_code=HTTP_201_CREATED)
 def crearLibros(data_libro: bibliotecaSchema):
     with engine.connect() as conn:
         nuevoLibro= data_libro.dict()
         conn.execute(biblioteca.insert().values(nuevoLibro))
         return Response(status_code=HTTP_201_CREATED)
-
+#Modificacion de un libro
 @bibliotec.put("/api/actualizarEstado/{isbnId}",response_model=bibliotecaSchema)
 def actualizarLibro(data_update:bibliotecaSchema,isbnId: str):
     with engine.connect() as conn:
@@ -40,7 +44,7 @@ def actualizarLibro(data_update:bibliotecaSchema,isbnId: str):
         resultado = conn.execute(biblioteca.select().where(biblioteca.c.isbnId == isbnId)).first()
         return resultado
 
-
+#Borrar un libro
 @bibliotec.delete("/api/libro/{isbnId}",status_code=HTTP_204_NO_CONTENT)
 def borrarLibro(isbnId:str):
     with engine.connect() as conn:
@@ -49,31 +53,3 @@ def borrarLibro(isbnId:str):
 
 
 
-
-
-"""""
-@biblioteca.get("api/ObtenerLibros", response_model=List[bibliotecaSchema])
-def obtenerLibros():
-    #with engine.connect() as conn:
-        #resultado= conn.execute(bibliotecas.select().fetchall())
-        #return resultado
-
-
-@biblioteca.get("api/libro/{isbnId_Id}", response_model=bibliotecaSchema)
-def buscarLibro(isbnId_Id: str):
-    #with engine.connect() as conn:
-        #resultado= conn.execute(bibliotecas.select().where(bibliotecas.c.isbnId==isbnId_Id)).first()
-        #return resultado
-
-@biblioteca.post("/api/agregarLibro")
-def crearLibro(data_Libro:bibliotecaSchema):
-    print(data_Libro)
-    #with engine.connect() as conn:
-        #nuevo_libro = data_Libro.dict()
-        #conn.execute(bibliotecas.insert().values(nuevo_libro)) #->datalibro
-    
-        #print(nuevo_libro)
-    
-
-
-"""

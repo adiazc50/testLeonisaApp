@@ -2,6 +2,7 @@ from sqlalchemy import Table, Column
 from sqlalchemy.sql.sqltypes import String, Integer
 from config.db import engine, meta_data
 
+#Creo la tabla para la DB en caso de que no exista.
 biblioteca= Table("biblioteca", meta_data,
                 Column("isbnId", Integer, primary_key=True),
                 Column("titulo",String(255), nullable=False),
