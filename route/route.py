@@ -10,6 +10,16 @@ biblioteca= APIRouter()
 def root():
     return{"message":"Bienvenidos al gestor de la API, para visualizar rutas dirigete a /docs"}
 
+
+@biblioteca.post("/api/crearLibros")
+def crearLibros(data_libro: bibliotecaSchema):
+    print(data_libro)
+
+
+
+
+
+
 """""
 @biblioteca.get("api/ObtenerLibros", response_model=List[bibliotecaSchema])
 def obtenerLibros():
